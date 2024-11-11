@@ -1,5 +1,5 @@
 import { Avatar } from "@/components/ui/avatar";
-import { Check } from "lucide-react";
+import { Check, Info } from "lucide-react";
 
 interface Message {
   id: string;
