@@ -1,16 +1,35 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --background: #FFFFFF;
+    --foreground: #141413;
+    --muted: #666666;
+    --bubble-received: #E5E7EB;
+    --bubble-sent: #61AAF2;
+    --border: #00000014;
+  }
+
+  :root[class~="dark"] {
+    --background: #141413;
+    --foreground: #FAFAF8;
+    --muted: #828179;
+    --bubble-received: #4B5563;
+    --bubble-sent: #61AAF2;
+    --border: #ffffff14;
+  }
+
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-[var(--background)] text-[var(--foreground)] antialiased;
   }
 }
 
 @layer utilities {
   .glass {
-    @apply bg-opacity-20 backdrop-blur-sm border border-white/10;
+    @apply bg-opacity-20 backdrop-blur-sm border border-[var(--border)];
   }
 }
 
@@ -19,11 +38,11 @@
 }
 
 .message-bubble.sent {
-  @apply bg-bubble-sent text-white ml-auto;
+  @apply bg-[var(--bubble-sent)] text-white ml-auto;
 }
 
 .message-bubble.received {
-  @apply bg-bubble-received text-white;
+  @apply bg-[var(--bubble-received)] text-[var(--foreground)];
 }
 
 .scrollbar-hide::-webkit-scrollbar {

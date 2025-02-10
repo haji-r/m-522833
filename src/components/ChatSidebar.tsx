@@ -1,5 +1,6 @@
-import { Search, Plus } from "lucide-react";
+import { Search, Plus, Moon, Sun } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
+import { useTheme } from "./ThemeProvider";
 
 interface User {
   id: string;
@@ -36,6 +37,8 @@ const users: User[] = [
 ];
 
 export const ChatSidebar = () => {
+  const { theme, toggleTheme } = useTheme();
+
   return (
     <div className="w-80 h-screen glass p-4 flex flex-col gap-4">
       <div className="flex items-center justify-between">
@@ -49,9 +52,21 @@ export const ChatSidebar = () => {
           </Avatar>
           <span className="font-medium">Me</span>
         </div>
-        <button className="p-2 hover:bg-white/5 rounded-full transition-colors">
-          <Plus className="w-5 h-5" />
-        </button>
+        <div className="flex items-center gap-2">
+          <button 
+            onClick={toggleTheme}
+            className="p-2 hover:bg-white/5 rounded-full transition-colors"
+          >
+            {theme === 'dark' ? (
+              <Sun className="w-5 h-5" />
+            ) : (
+              <Moon className="w-5 h-5" />
+            )}
+          </button>
+          <button className="p-2 hover:bg-white/5 rounded-full transition-colors">
+            <Plus className="w-5 h-5" />
+          </button>
+        </div>
       </div>
       
       <div className="relative">
