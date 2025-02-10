@@ -1,3 +1,4 @@
+
 import { Avatar } from "@/components/ui/avatar";
 import { Check, Info } from "lucide-react";
 import { useState } from "react";
@@ -9,6 +10,7 @@ interface Message {
   sender: "me" | "other";
   timestamp: string;
   read: boolean;
+  sending?: boolean;
 }
 
 const initialMessages: Message[] = [
@@ -22,25 +24,55 @@ const initialMessages: Message[] = [
 export const ChatMessages = () => {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [newMessage, setNewMessage] = useState("");
+  const [isSending, setIsSending] = useState(false);
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMessage.trim()) return;
+    if (!newMessage.trim() || isSending) return;
 
     const newMsg: Message = {
       id: Date.now().toString(),
       content: newMessage,
       sender: "me",
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      read: false
+      read: false,
+      sending: true
     };
 
-    setMessages([...messages, newMsg]);
+    setMessages(prev => [...prev, newMsg]);
+    setIsSending(true);
     setNewMessage("");
+
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    setMessages(prev => 
+      prev.map(msg => 
+        msg.id === newMsg.id 
+          ? { ...msg, sending: false } 
+          : msg
+      )
+    );
+    
+    setIsSending(false);
+    
     toast({
       description: "Message sent",
       duration: 2000,
     });
+
+    // Simulate received message after a delay
+    setTimeout(async () => {
+      const replyMsg: Message = {
+        id: Date.now().toString(),
+        content: "Thanks for sharing! The interface looks really clean and modern.",
+        sender: "other",
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        read: true,
+      };
+
+      setMessages(prev => [...prev, replyMsg]);
+    }, 2000);
   };
 
   return (
@@ -74,12 +106,18 @@ export const ChatMessages = () => {
               />
             </Avatar>
             <div className="flex flex-col gap-1">
-              <div className={`message-bubble ${message.sender === "me" ? "sent" : "received"}`}>
+              <div className={`message-bubble ${message.sender === "me" ? "sent" : "received"} ${message.sending ? "opacity-70" : ""}`}>
                 {message.content}
               </div>
               <div className="flex items-center gap-1 text-xs text-muted">
                 {message.timestamp}
-                {message.sender === "me" && message.read && <Check className="w-3 h-3" />}
+                {message.sender === "me" && (
+                  message.sending ? (
+                    <div className="w-3 h-3 rounded-full bg-white/20 animate-pulse" />
+                  ) : (
+                    message.read && <Check className="w-3 h-3" />
+                  )
+                )}
               </div>
             </div>
           </div>
@@ -94,10 +132,12 @@ export const ChatMessages = () => {
             className="flex-1 bg-transparent outline-none px-2"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
+            disabled={isSending}
           />
           <button 
             type="submit"
-            className="p-2 hover:bg-white/5 rounded-full transition-colors"
+            className={`p-2 hover:bg-white/5 rounded-full transition-colors ${isSending ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={isSending}
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" />
