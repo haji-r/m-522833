@@ -39,7 +39,50 @@ export const ChatMessages = () => {
   const simulateReceiveMessage = () => {
     const replyMsg: Message = {
       id: Date.now().toString(),
-      content: "Just saw your latest updates - they look fantastic! 🎨\n\nI particularly like how you've used:\n- Clean typography\n- Consistent spacing\n- Subtle animations",
+      content: `# Project Overview
+
+Here's a summary of our latest design system:
+
+## Components
+- Buttons
+- Cards
+- Navigation
+
+## Color Palette
+
+| Element | Light | Dark |
+|---------|-------|------|
+| Background | #FFFFFF | #141413 |
+| Text | #222222 | #FAFAF8 |
+| Accent | #646CFF | #747BFF |
+
+### Typography
+
+We're using a **hierarchical** system with:
+1. Large headings
+2. Medium subheadings
+3. Body text
+
+You can find more details in our [design documentation](https://example.com).
+
+> The key is maintaining consistency across all platforms.
+
+Some other considerations:
+* Responsive design
+* Accessibility
+* Performance
+
+\`inline code\` and normal text can be mixed.
+
+~~~
+// Code block example
+const theme = {
+  light: '#FFFFFF',
+  dark: '#141413'
+}
+~~~
+
+Hope this helps with the project! 🎨`,
       sender: "other",
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       read: true,
