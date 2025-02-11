@@ -6,11 +6,11 @@
 @layer base {
   :root {
     --background: #FFFFFF;
-    --foreground: #141413;
-    --muted: #666666;
-    --message-bg: #F3F4F6;
-    --bubble-sent: #61AAF2;
-    --border: #00000014;
+    --foreground: #222222;
+    --muted: #403E43;
+    --message-bg: #F3F3F3;
+    --bubble-sent: #F3F3F3;
+    --border: #E5E5E5;
   }
 
   :root[class~="dark"] {
@@ -18,7 +18,7 @@
     --foreground: #FAFAF8;
     --muted: #828179;
     --message-bg: #2D3135;
-    --bubble-sent: #61AAF2;
+    --bubble-sent: #2D3135;
     --border: #ffffff14;
   }
 

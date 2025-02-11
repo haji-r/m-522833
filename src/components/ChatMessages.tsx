@@ -17,8 +17,8 @@ const initialMessages: Message[] = [
   { id: "1", content: "Hey! How's your day going?", sender: "other", timestamp: "09:15", read: true },
   { id: "2", content: "Pretty good! Just working on some new designs. How about you?", sender: "me", timestamp: "09:17", read: true },
   { id: "3", content: "That's great! I'm actually looking for some design inspiration. Mind sharing what you're working on?", sender: "other", timestamp: "09:20", read: true },
-  { id: "4", content: "Of course! I'm designing a new chat interface with a minimalist Apple-inspired look.", sender: "me", timestamp: "09:22", read: true },
-  { id: "5", content: "That sounds amazing! I love Apple's design philosophy. Would love to see it when it's ready!", sender: "other", timestamp: "09:25", read: true },
+  { id: "4", content: "Of course! I'm designing a new chat interface with a minimalist Perplexity-inspired look.", sender: "me", timestamp: "09:22", read: true },
+  { id: "5", content: "That sounds amazing! I love Perplexity's clean design. Would love to see it when it's ready!", sender: "other", timestamp: "09:25", read: true },
 ];
 
 export const ChatMessages = () => {
@@ -95,32 +95,32 @@ export const ChatMessages = () => {
 
   return (
     <div className="flex-1 flex flex-col h-screen">
-      <div className="glass p-4 flex items-center justify-between">
+      <div className="bg-[var(--background)] border-b border-[var(--border)] p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Avatar className="w-10 h-10">
             <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158" alt="User" className="object-cover" />
           </Avatar>
           <div>
-            <div className="font-medium">Sarah Parker</div>
-            <div className="text-sm text-muted">Active now</div>
+            <div className="font-medium text-[var(--foreground)]">Sarah Parker</div>
+            <div className="text-sm text-[var(--muted)]">Active now</div>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <button 
             onClick={simulateReceiveMessage}
-            className="p-2 hover:bg-white/5 rounded-full transition-colors"
+            className="p-2 hover:bg-[var(--message-bg)] rounded-full transition-colors"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" transform="rotate(180 12 12)" />
             </svg>
           </button>
-          <button className="p-2 hover:bg-white/5 rounded-full transition-colors">
+          <button className="p-2 hover:bg-[var(--message-bg)] rounded-full transition-colors">
             <Info className="w-5 h-5" />
           </button>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto py-4 space-y-6 px-4 md:px-8 scrollbar-hide">
+      <div className="flex-1 overflow-y-auto py-4 space-y-6 px-4 md:px-8 scrollbar-hide bg-[var(--background)]">
         {messages.map((message, index) => {
           const isFirstInGroup = index === 0 || messages[index - 1].sender !== message.sender;
           const isLastInGroup = index === messages.length - 1 || messages[index + 1].sender !== message.sender;
@@ -144,20 +144,20 @@ export const ChatMessages = () => {
               )}
               <div className={`flex flex-col ${message.sender === "me" ? "items-end" : "items-start"}`}>
                 <div 
-                  className={`relative px-4 py-2 rounded-lg max-w-[85%] ${
+                  className={`px-4 py-2 rounded-lg max-w-[85%] ${
                     message.sender === "me" 
-                      ? "bg-accent text-white" 
+                      ? "bg-[var(--bubble-sent)] text-[var(--foreground)]" 
                       : "bg-[var(--message-bg)] text-[var(--foreground)]"
                   } ${message.sending ? "opacity-70" : ""}`}
                 >
                   {message.content}
                 </div>
                 {isLastInGroup && (
-                  <div className="flex items-center gap-1 text-xs text-muted mt-1 px-1">
+                  <div className="flex items-center gap-1 text-xs text-[var(--muted)] mt-1 px-1">
                     {message.timestamp}
                     {message.sender === "me" && (
                       message.sending ? (
-                        <div className="w-3 h-3 rounded-full bg-white/20 animate-pulse" />
+                        <div className="w-3 h-3 rounded-full bg-[var(--muted)] animate-pulse" />
                       ) : (
                         message.read && <Check className="w-3 h-3" />
                       )
@@ -171,19 +171,19 @@ export const ChatMessages = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      <form onSubmit={handleSendMessage} className="p-4">
-        <div className="glass rounded-full p-2 flex items-center gap-2">
+      <form onSubmit={handleSendMessage} className="p-4 bg-[var(--background)] border-t border-[var(--border)]">
+        <div className="flex items-center gap-2 bg-[var(--message-bg)] rounded-lg p-2">
           <input
             type="text"
             placeholder="Type a message..."
-            className="flex-1 bg-transparent outline-none px-2"
+            className="flex-1 bg-transparent outline-none px-2 text-[var(--foreground)]"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             disabled={isSending}
           />
           <button 
             type="submit"
-            className={`p-2 hover:bg-white/5 rounded-full transition-colors ${isSending ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`p-2 hover:bg-[var(--border)] rounded-full transition-colors ${isSending ? 'opacity-50 cursor-not-allowed' : ''}`}
             disabled={isSending}
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
