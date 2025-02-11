@@ -26,6 +26,27 @@ export const ChatMessages = () => {
   const [newMessage, setNewMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
 
+  const simulateReceiveMessage = () => {
+    const replyMsg: Message = {
+      id: Date.now().toString(),
+      content: "Just saw your latest updates - they look fantastic! 🎨",
+      sender: "other",
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      read: true,
+    };
+
+    // Show typing indicator
+    toast({
+      description: "Sarah is typing...",
+      duration: 2000,
+    });
+
+    // Simulate delay before message appears
+    setTimeout(() => {
+      setMessages(prev => [...prev, replyMsg]);
+    }, 2000);
+  };
+
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim() || isSending) return;
@@ -63,15 +84,7 @@ export const ChatMessages = () => {
 
     // Simulate received message after a delay
     setTimeout(async () => {
-      const replyMsg: Message = {
-        id: Date.now().toString(),
-        content: "Thanks for sharing! The interface looks really clean and modern.",
-        sender: "other",
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        read: true,
-      };
-
-      setMessages(prev => [...prev, replyMsg]);
+      simulateReceiveMessage();
     }, 2000);
   };
 
@@ -87,9 +100,19 @@ export const ChatMessages = () => {
             <div className="text-sm text-muted">Active now</div>
           </div>
         </div>
-        <button className="p-2 hover:bg-white/5 rounded-full transition-colors">
-          <Info className="w-5 h-5" />
-        </button>
+        <div className="flex items-center gap-2">
+          <button 
+            onClick={simulateReceiveMessage}
+            className="p-2 hover:bg-white/5 rounded-full transition-colors"
+          >
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" transform="rotate(180 12 12)" />
+            </svg>
+          </button>
+          <button className="p-2 hover:bg-white/5 rounded-full transition-colors">
+            <Info className="w-5 h-5" />
+          </button>
+        </div>
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-hide">
