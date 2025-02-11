@@ -1,7 +1,7 @@
 
 import { Avatar } from "@/components/ui/avatar";
 import { Check, Info } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { toast } from "@/components/ui/use-toast";
 
 interface Message {
@@ -25,6 +25,15 @@ export const ChatMessages = () => {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [newMessage, setNewMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]); // Scroll when messages change
 
   const simulateReceiveMessage = () => {
     const replyMsg: Message = {
@@ -145,6 +154,7 @@ export const ChatMessages = () => {
             </div>
           </div>
         ))}
+        <div ref={messagesEndRef} /> {/* Scroll anchor */}
       </div>
 
       <form onSubmit={handleSendMessage} className="p-4">
