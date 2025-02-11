@@ -3,6 +3,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { Check, Info } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { toast } from "@/components/ui/use-toast";
+import ReactMarkdown from 'react-markdown';
 
 interface Message {
   id: string;
@@ -16,9 +17,9 @@ interface Message {
 const initialMessages: Message[] = [
   { id: "1", content: "Hey! How's your day going?", sender: "other", timestamp: "09:15", read: true },
   { id: "2", content: "Pretty good! Just working on some new designs. How about you?", sender: "me", timestamp: "09:17", read: true },
-  { id: "3", content: "That's great! I'm actually looking for some design inspiration. Mind sharing what you're working on?", sender: "other", timestamp: "09:20", read: true },
-  { id: "4", content: "Of course! I'm designing a new chat interface with a minimalist Perplexity-inspired look.", sender: "me", timestamp: "09:22", read: true },
-  { id: "5", content: "That sounds amazing! I love Perplexity's clean design. Would love to see it when it's ready!", sender: "other", timestamp: "09:25", read: true },
+  { id: "3", content: "That's great! I'm actually looking for some design inspiration. Mind sharing what you're working on?\n\nHere's what I'm interested in:\n- UI/UX patterns\n- Color schemes\n- Typography", sender: "other", timestamp: "09:20", read: true },
+  { id: "4", content: "Of course! I'm designing a new chat interface with a minimalist **Perplexity-inspired** look.\n\n```\nKey features:\n1. Clean typography\n2. Minimal animations\n3. Focus on readability\n```", sender: "me", timestamp: "09:22", read: true },
+  { id: "5", content: "That sounds amazing! I love Perplexity's clean design. Would love to see it when it's ready! 🎨", sender: "other", timestamp: "09:25", read: true },
 ];
 
 export const ChatMessages = () => {
@@ -38,7 +39,7 @@ export const ChatMessages = () => {
   const simulateReceiveMessage = () => {
     const replyMsg: Message = {
       id: Date.now().toString(),
-      content: "Just saw your latest updates - they look fantastic! 🎨",
+      content: "Just saw your latest updates - they look fantastic! 🎨\n\nI particularly like how you've used:\n- Clean typography\n- Consistent spacing\n- Subtle animations",
       sender: "other",
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       read: true,
@@ -148,9 +149,9 @@ export const ChatMessages = () => {
                     message.sender === "me" 
                       ? "bg-[var(--bubble-sent)] text-[var(--foreground)]" 
                       : "bg-[var(--message-bg)] text-[var(--foreground)]"
-                  } ${message.sending ? "opacity-70" : ""}`}
+                  } ${message.sending ? "opacity-70" : ""} prose prose-sm max-w-none`}
                 >
-                  {message.content}
+                  <ReactMarkdown>{message.content}</ReactMarkdown>
                 </div>
                 {isLastInGroup && (
                   <div className="flex items-center gap-1 text-xs text-[var(--muted)] mt-1 px-1">
