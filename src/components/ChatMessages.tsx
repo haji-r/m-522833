@@ -39,50 +39,76 @@ export const ChatMessages = () => {
   const simulateReceiveMessage = () => {
     const replyMsg: Message = {
       id: Date.now().toString(),
-      content: `# Project Overview
+      content: `# Design System Documentation
 
-Here's a summary of our latest design system:
+## Introduction
+Welcome to our comprehensive design system documentation. This guide will help you understand our visual language and components.
 
-## Components
-- Buttons
+### Core Principles
+Our design system is built on three fundamental principles:
+1. Consistency
+2. Accessibility
+3. Scalability
+
+#### Getting Started
+New to our design system? Here's what you need to know first.
+
+## Visual Elements
+
+### Color System
+Here's our color palette breakdown:
+
+| Category | Light Mode | Dark Mode | Usage |
+|----------|------------|-----------|--------|
+| Primary | #646CFF | #747BFF | CTAs |
+| Secondary | #434343 | #A0A0A0 | Text |
+| Accent | #FF4545 | #FF6B6B | Alerts |
+| Background | #FFFFFF | #141413 | Surface |
+
+### Typography Hierarchy
+1. Display (32px)
+2. Heading (24px)
+3. Subheading (20px)
+4. Body (16px)
+
+## Components Library
+
+### Interactive Elements
+* Buttons
+* Inputs
+* Dropdowns
+
+### Layout Components
 - Cards
-- Navigation
+- Grids
+- Navigation bars
 
-## Color Palette
+#### Usage Guidelines
+* Follow **accessibility** guidelines
+* Maintain _consistent_ spacing
+* Use appropriate \`color contrast\`
 
-| Element | Light | Dark |
-|---------|-------|------|
-| Background | #FFFFFF | #141413 |
-| Text | #222222 | #FAFAF8 |
-| Accent | #646CFF | #747BFF |
+> Important: Always refer to the latest version of this documentation.
 
-### Typography
+You can find more details in our [complete documentation](https://example.com/docs).
 
-We're using a **hierarchical** system with:
-1. Large headings
-2. Medium subheadings
-3. Body text
+### Code Examples
 
-You can find more details in our [design documentation](https://example.com).
+\`\`\`typescript
+interface Theme {
+  light: string;
+  dark: string;
+}
 
-> The key is maintaining consistency across all platforms.
-
-Some other considerations:
-* Responsive design
-* Accessibility
-* Performance
-
-\`inline code\` and normal text can be mixed.
-
-~~~
-// Code block example
-const theme = {
+const theme: Theme = {
   light: '#FFFFFF',
   dark: '#141413'
 }
-~~~
+\`\`\`
 
-Hope this helps with the project! 🎨`,
+---
+
+Need help? Contact our [design team](mailto:design@example.com) 🎨`,
       sender: "other",
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       read: true,
