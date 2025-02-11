@@ -33,7 +33,7 @@ export const ChatMessages = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]); // Scroll when messages change
+  }, [messages]);
 
   const simulateReceiveMessage = () => {
     const replyMsg: Message = {
@@ -44,13 +44,11 @@ export const ChatMessages = () => {
       read: true,
     };
 
-    // Show typing indicator
     toast({
       description: "Sarah is typing...",
       duration: 2000,
     });
 
-    // Simulate delay before message appears
     setTimeout(() => {
       setMessages(prev => [...prev, replyMsg]);
     }, 2000);
@@ -73,7 +71,6 @@ export const ChatMessages = () => {
     setIsSending(true);
     setNewMessage("");
 
-    // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     setMessages(prev => 
@@ -91,7 +88,6 @@ export const ChatMessages = () => {
       duration: 2000,
     });
 
-    // Simulate received message after a delay
     setTimeout(async () => {
       simulateReceiveMessage();
     }, 2000);
@@ -124,37 +120,55 @@ export const ChatMessages = () => {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-hide">
-        {messages.map((message) => (
-          <div key={message.id} className={`flex items-end gap-2 ${message.sender === "me" ? "flex-row-reverse" : ""}`}>
-            <Avatar className="w-8 h-8">
-              <img 
-                src={message.sender === "me" 
-                  ? "https://images.unsplash.com/photo-1649972904349-6e44c42644a7"
-                  : "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
-                } 
-                alt={message.sender === "me" ? "Me" : "Other"} 
-                className="object-cover"
-              />
-            </Avatar>
-            <div className="flex flex-col gap-1">
-              <div className={`message-bubble ${message.sender === "me" ? "sent" : "received"} ${message.sending ? "opacity-70" : ""}`}>
-                {message.content}
-              </div>
-              <div className="flex items-center gap-1 text-xs text-muted">
-                {message.timestamp}
-                {message.sender === "me" && (
-                  message.sending ? (
-                    <div className="w-3 h-3 rounded-full bg-white/20 animate-pulse" />
-                  ) : (
-                    message.read && <Check className="w-3 h-3" />
-                  )
+      <div className="flex-1 overflow-y-auto py-4 space-y-6 px-4 md:px-8 scrollbar-hide">
+        {messages.map((message, index) => {
+          const isFirstInGroup = index === 0 || messages[index - 1].sender !== message.sender;
+          const isLastInGroup = index === messages.length - 1 || messages[index + 1].sender !== message.sender;
+          
+          return (
+            <div 
+              key={message.id} 
+              className={`flex items-start gap-3 ${message.sender === "me" ? "flex-row-reverse" : ""}`}
+            >
+              {isLastInGroup && (
+                <Avatar className="w-8 h-8 mt-0.5">
+                  <img 
+                    src={message.sender === "me" 
+                      ? "https://images.unsplash.com/photo-1649972904349-6e44c42644a7"
+                      : "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
+                    } 
+                    alt={message.sender === "me" ? "Me" : "Other"} 
+                    className="object-cover"
+                  />
+                </Avatar>
+              )}
+              <div className={`flex flex-col ${message.sender === "me" ? "items-end" : "items-start"}`}>
+                <div 
+                  className={`relative px-4 py-2 rounded-lg max-w-[85%] ${
+                    message.sender === "me" 
+                      ? "bg-accent text-white" 
+                      : "bg-[var(--message-bg)] text-[var(--foreground)]"
+                  } ${message.sending ? "opacity-70" : ""}`}
+                >
+                  {message.content}
+                </div>
+                {isLastInGroup && (
+                  <div className="flex items-center gap-1 text-xs text-muted mt-1 px-1">
+                    {message.timestamp}
+                    {message.sender === "me" && (
+                      message.sending ? (
+                        <div className="w-3 h-3 rounded-full bg-white/20 animate-pulse" />
+                      ) : (
+                        message.read && <Check className="w-3 h-3" />
+                      )
+                    )}
+                  </div>
                 )}
               </div>
             </div>
-          </div>
-        ))}
-        <div ref={messagesEndRef} /> {/* Scroll anchor */}
+          );
+        })}
+        <div ref={messagesEndRef} />
       </div>
 
       <form onSubmit={handleSendMessage} className="p-4">

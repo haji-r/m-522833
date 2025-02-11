@@ -8,7 +8,7 @@
     --background: #FFFFFF;
     --foreground: #141413;
     --muted: #666666;
-    --bubble-received: #E5E7EB;
+    --message-bg: #F3F4F6;
     --bubble-sent: #61AAF2;
     --border: #00000014;
   }
@@ -17,7 +17,7 @@
     --background: #141413;
     --foreground: #FAFAF8;
     --muted: #828179;
-    --bubble-received: #4B5563;
+    --message-bg: #2D3135;
     --bubble-sent: #61AAF2;
     --border: #ffffff14;
   }
@@ -31,18 +31,6 @@
   .glass {
     @apply bg-opacity-20 backdrop-blur-sm border border-[var(--border)];
   }
-}
-
-.message-bubble {
-  @apply rounded-2xl px-4 py-2 max-w-[80%] break-words;
-}
-
-.message-bubble.sent {
-  @apply bg-[var(--bubble-sent)] text-white ml-auto;
-}
-
-.message-bubble.received {
-  @apply bg-[var(--bubble-received)] text-[var(--foreground)];
 }
 
 .scrollbar-hide::-webkit-scrollbar {
