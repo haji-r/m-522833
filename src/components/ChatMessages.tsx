@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { toast } from "@/components/ui/use-toast";
 import { Message } from "@/types/chat";
@@ -148,10 +149,10 @@ Need help? Contact our [design team](mailto:design@example.com) 🎨`,
   };
 
   return (
-    <div className="flex-1 flex flex-col h-screen">
+    <div className="flex-1 flex flex-col h-[100dvh]">
       <ChatHeader onSendSimulatedMessage={simulateReceiveMessage} />
 
-      <div className="flex-1 overflow-y-auto py-4 space-y-6 px-4 md:px-8 scrollbar-hide bg-[var(--background)]">
+      <div className="flex-1 overflow-y-auto py-2 sm:py-4 space-y-4 sm:space-y-6 px-2 sm:px-4 md:px-8 scrollbar-hide bg-[var(--background)]">
         {messages.map((message, index) => {
           const isFirstInGroup = index === 0 || messages[index - 1].sender !== message.sender;
           const isLastInGroup = index === messages.length - 1 || messages[index + 1].sender !== message.sender;

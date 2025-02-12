@@ -13,10 +13,10 @@ interface ChatMessageProps {
 export const ChatMessage = ({ message, isFirstInGroup, isLastInGroup }: ChatMessageProps) => {
   return (
     <div 
-      className={`flex items-start gap-3 ${message.sender === "me" ? "flex-row-reverse" : ""}`}
+      className={`flex items-start gap-2 sm:gap-3 ${message.sender === "me" ? "flex-row-reverse" : ""}`}
     >
       {isLastInGroup && (
-        <Avatar className="w-8 h-8 mt-0.5">
+        <Avatar className="w-6 h-6 sm:w-8 sm:h-8 mt-0.5 flex-shrink-0">
           <img 
             src={message.sender === "me" 
               ? "https://images.unsplash.com/photo-1649972904349-6e44c42644a7"
@@ -29,11 +29,11 @@ export const ChatMessage = ({ message, isFirstInGroup, isLastInGroup }: ChatMess
       )}
       <div className={`flex flex-col ${message.sender === "me" ? "items-end" : "items-start"}`}>
         <div 
-          className={`px-4 py-2 rounded-lg max-w-[85%] ${
+          className={`px-3 sm:px-4 py-2 rounded-lg max-w-[85%] sm:max-w-[75%] ${
             message.sender === "me" 
               ? "bg-[var(--bubble-sent)] text-[var(--foreground)]" 
               : "bg-[var(--message-bg)] text-[var(--foreground)]"
-          } ${message.sending ? "opacity-70" : ""} prose prose-sm max-w-none`}
+          } ${message.sending ? "opacity-70" : ""} prose prose-sm sm:prose-base max-w-none`}
         >
           <ReactMarkdown>{message.content}</ReactMarkdown>
         </div>
@@ -42,9 +42,9 @@ export const ChatMessage = ({ message, isFirstInGroup, isLastInGroup }: ChatMess
             {message.timestamp}
             {message.sender === "me" && (
               message.sending ? (
-                <div className="w-3 h-3 rounded-full bg-[var(--muted)] animate-pulse" />
+                <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-[var(--muted)] animate-pulse" />
               ) : (
-                message.read && <Check className="w-3 h-3" />
+                message.read && <Check className="w-2 h-2 sm:w-3 sm:h-3" />
               )
             )}
           </div>
