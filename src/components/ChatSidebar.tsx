@@ -1,3 +1,4 @@
+
 import { Search, Plus, Moon, Sun } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { useTheme } from "./ThemeProvider";
@@ -40,7 +41,7 @@ export const ChatSidebar = () => {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <div className="w-80 h-screen glass p-4 flex flex-col gap-4">
+    <div className="w-[280px] sm:w-80 h-full glass p-4 flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Avatar className="w-8 h-8">
