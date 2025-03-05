@@ -1,16 +1,17 @@
 
 import { useState, useRef, useEffect } from "react";
 import { toast } from "@/components/ui/use-toast";
+import { Message } from "@/types/chat";
 import { initialMessages } from "@/constants/initialMessages";
 import { ChatHeader } from "./chat/ChatHeader";
 import { ChatMessage } from "./chat/ChatMessage";
 import { ChatInput } from "./chat/ChatInput";
 
 export const ChatMessages = () => {
-  const [messages, setMessages] = useState(initialMessages);
+  const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [newMessage, setNewMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
-  const messagesEndRef = useRef(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -21,7 +22,7 @@ export const ChatMessages = () => {
   }, [messages]);
 
   const simulateReceiveMessage = () => {
-    const replyMsg = {
+    const replyMsg: Message = {
       id: Date.now().toString(),
       content: `# Design System Documentation
 
@@ -78,8 +79,13 @@ You can find more details in our [complete documentation](https://example.com/do
 
 ### Code Examples
 
-\`\`\`javascript
-const theme = {
+\`\`\`typescript
+interface Theme {
+  light: string;
+  dark: string;
+}
+
+const theme: Theme = {
   light: '#FFFFFF',
   dark: '#141413'
 }
@@ -103,11 +109,11 @@ Need help? Contact our [design team](mailto:design@example.com) 🎨`,
     }, 2000);
   };
 
-  const handleSendMessage = async (e) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim() || isSending) return;
 
-    const newMsg = {
+    const newMsg: Message = {
       id: Date.now().toString(),
       content: newMessage,
       sender: "me",

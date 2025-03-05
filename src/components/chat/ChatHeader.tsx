@@ -2,7 +2,11 @@
 import { Avatar } from "@/components/ui/avatar";
 import { Info } from "lucide-react";
 
-export const ChatHeader = ({ onSendSimulatedMessage }) => {
+interface ChatHeaderProps {
+  onSendSimulatedMessage: () => void;
+}
+
+export const ChatHeader = ({ onSendSimulatedMessage }: ChatHeaderProps) => {
   return (
     <div className="bg-[var(--background)] border-b border-[var(--border)] p-2 sm:p-4 flex items-center justify-between">
       <div className="flex items-center gap-2 sm:gap-3">

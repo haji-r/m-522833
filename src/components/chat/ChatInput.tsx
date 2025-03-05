@@ -1,12 +1,12 @@
 
-/**
- * @param {Object} props
- * @param {string} props.newMessage
- * @param {function} props.setNewMessage
- * @param {function} props.handleSendMessage
- * @param {boolean} props.isSending
- */
-export const ChatInput = ({ newMessage, setNewMessage, handleSendMessage, isSending }) => {
+interface ChatInputProps {
+  newMessage: string;
+  setNewMessage: (message: string) => void;
+  handleSendMessage: (e: React.FormEvent) => void;
+  isSending: boolean;
+}
+
+export const ChatInput = ({ newMessage, setNewMessage, handleSendMessage, isSending }: ChatInputProps) => {
   return (
     <form onSubmit={handleSendMessage} className="p-2 sm:p-4 bg-[var(--background)] border-t border-[var(--border)]">
       <div className="flex items-center gap-2 bg-[var(--message-bg)] rounded-lg p-1.5 sm:p-2">

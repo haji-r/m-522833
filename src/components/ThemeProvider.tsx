@@ -1,17 +1,22 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-const ThemeContext = createContext({
+type Theme = "dark" | "light";
+
+const ThemeContext = createContext<{
+  theme: Theme;
+  toggleTheme: () => void;
+}>({
   theme: "dark",
   toggleTheme: () => {},
 });
 
 export const useTheme = () => useContext(ThemeContext);
 
-export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState(() => {
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("theme");
+      const saved = localStorage.getItem("theme") as Theme;
       if (saved) return saved;
       return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
     }
