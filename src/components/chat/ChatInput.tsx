@@ -1,4 +1,6 @@
 
+import React from 'react';
+
 interface ChatInputProps {
   newMessage: string;
   setNewMessage: (message: string) => void;

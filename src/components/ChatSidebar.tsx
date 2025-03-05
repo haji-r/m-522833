@@ -1,4 +1,5 @@
 
+import React from 'react';
 import { Search, Plus, Moon, Sun } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { useTheme } from "./ThemeProvider";

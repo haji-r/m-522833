@@ -1,8 +1,8 @@
 
+import React, { useState, useEffect } from "react";
 import { ChatSidebar } from "@/components/ChatSidebar";
 import { ChatMessages } from "@/components/ChatMessages";
 import { Menu } from "lucide-react";
-import { useState, useEffect } from "react";
 
 const Index = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);

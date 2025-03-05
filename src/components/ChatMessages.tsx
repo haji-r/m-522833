@@ -1,5 +1,5 @@
 
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { toast } from "@/components/ui/use-toast";
 import { Message } from "@/types/chat";
 import { initialMessages } from "@/constants/initialMessages";
