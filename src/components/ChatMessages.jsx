@@ -1,17 +1,16 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { toast } from "@/components/ui/use-toast";
-import { Message } from "@/types/chat";
 import { initialMessages } from "@/constants/initialMessages";
 import { ChatHeader } from "./chat/ChatHeader";
 import { ChatMessage } from "./chat/ChatMessage";
 import { ChatInput } from "./chat/ChatInput";
 
 export const ChatMessages = () => {
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const [messages, setMessages] = useState(initialMessages);
   const [newMessage, setNewMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -22,7 +21,7 @@ export const ChatMessages = () => {
   }, [messages]);
 
   const simulateReceiveMessage = () => {
-    const replyMsg: Message = {
+    const replyMsg = {
       id: Date.now().toString(),
       content: `# Design System Documentation
 
@@ -109,11 +108,11 @@ Need help? Contact our [design team](mailto:design@example.com) 🎨`,
     }, 2000);
   };
 
-  const handleSendMessage = async (e: React.FormEvent) => {
+  const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!newMessage.trim() || isSending) return;
 
-    const newMsg: Message = {
+    const newMsg = {
       id: Date.now().toString(),
       content: newMessage,
       sender: "me",

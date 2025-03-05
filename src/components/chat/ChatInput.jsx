@@ -1,14 +1,19 @@
 
 import React from 'react';
 
-interface ChatInputProps {
-  newMessage: string;
-  setNewMessage: (message: string) => void;
-  handleSendMessage: (e: React.FormEvent) => void;
-  isSending: boolean;
-}
+/**
+ * @typedef {Object} ChatInputProps
+ * @property {string} newMessage
+ * @property {function} setNewMessage
+ * @property {function} handleSendMessage
+ * @property {boolean} isSending
+ */
 
-export const ChatInput = ({ newMessage, setNewMessage, handleSendMessage, isSending }: ChatInputProps) => {
+/**
+ * Chat input component
+ * @param {ChatInputProps} props
+ */
+export const ChatInput = ({ newMessage, setNewMessage, handleSendMessage, isSending }) => {
   return (
     <form onSubmit={handleSendMessage} className="p-2 sm:p-4 bg-[var(--background)] border-t border-[var(--border)]">
       <div className="flex items-center gap-2 bg-[var(--message-bg)] rounded-lg p-1.5 sm:p-2">
