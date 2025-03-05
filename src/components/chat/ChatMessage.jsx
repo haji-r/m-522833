@@ -2,15 +2,14 @@
 import { Avatar } from "@/components/ui/avatar";
 import { Check } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
-import { Message } from "@/types/chat";
 
-interface ChatMessageProps {
-  message: Message;
-  isFirstInGroup: boolean;
-  isLastInGroup: boolean;
-}
-
-export const ChatMessage = ({ message, isFirstInGroup, isLastInGroup }: ChatMessageProps) => {
+/**
+ * @param {Object} props
+ * @param {import('../../types/chat').Message} props.message
+ * @param {boolean} props.isFirstInGroup
+ * @param {boolean} props.isLastInGroup
+ */
+export const ChatMessage = ({ message, isFirstInGroup, isLastInGroup }) => {
   return (
     <div 
       className={`flex items-start gap-2 sm:gap-3 ${message.sender === "me" ? "flex-row-reverse" : ""}`}

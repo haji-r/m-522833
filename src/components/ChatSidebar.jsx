@@ -3,14 +3,7 @@ import { Search, Plus, Moon, Sun } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { useTheme } from "./ThemeProvider";
 
-interface User {
-  id: string;
-  name: string;
-  avatar: string;
-  status: string;
-}
-
-const users: User[] = [
+const users = [
   { 
     id: "1", 
     name: "Sarah Parker", 
