@@ -4,16 +4,14 @@ import { Search, Plus, Moon, Sun } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { useTheme } from "./ThemeProvider";
 
-/**
- * @typedef {Object} User
- * @property {string} id
- * @property {string} name
- * @property {string} avatar
- * @property {string} status
- */
+interface User {
+  id: string;
+  name: string;
+  avatar: string;
+  status: string;
+}
 
-/** @type {User[]} */
-const users = [
+const users: User[] = [
   { 
     id: "1", 
     name: "Sarah Parker", 

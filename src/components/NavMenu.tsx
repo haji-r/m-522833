@@ -45,9 +45,9 @@ export const NavMenu = () => {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link to="/register" className="flex items-center gap-2 cursor-pointer">
+          <Link to="/signup" className="flex items-center gap-2 cursor-pointer">
             <UserPlus className="w-4 h-4" />
-            <span>Register</span>
+            <span>Sign Up</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
