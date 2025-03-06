@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "./components/ThemeProvider";
 import Index from "./pages/Index";
+import SignUp from "./pages/SignUp";
 import { NavMenu } from "./components/NavMenu";
 
 const queryClient = new QueryClient();
@@ -25,7 +26,7 @@ const App = () => (
             <Route path="/about" element={<div className="p-4">About Page</div>} />
             <Route path="/contact" element={<div className="p-4">Contact Page</div>} />
             <Route path="/admin" element={<div className="p-4">Admin Page</div>} />
-            <Route path="/signup" element={<div className="p-4">Sign Up Page</div>} />
+            <Route path="/signup" element={<SignUp />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>
