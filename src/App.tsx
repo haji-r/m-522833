@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "./components/ThemeProvider";
 import Index from "./pages/Index";
 import SignUp from "./pages/SignUp";
+import SignIn from "./pages/SignIn";
 import { NavMenu } from "./components/NavMenu";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/contact" element={<div className="p-4">Contact Page</div>} />
             <Route path="/admin" element={<div className="p-4">Admin Page</div>} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/signin" element={<SignIn />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>

@@ -7,7 +7,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Home, Info, Mail, User, UserPlus, LogOut, Menu } from "lucide-react";
+import { Home, Info, Mail, User, UserPlus, LogOut, Menu, LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const NavMenu = () => {
@@ -48,6 +48,12 @@ export const NavMenu = () => {
           <Link to="/signup" className="flex items-center gap-2 cursor-pointer">
             <UserPlus className="w-4 h-4" />
             <span>Sign Up</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/signin" className="flex items-center gap-2 cursor-pointer">
+            <LogIn className="w-4 h-4" />
+            <span>Sign In</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
