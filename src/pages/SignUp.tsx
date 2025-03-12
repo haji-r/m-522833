@@ -24,6 +24,7 @@ import {
   FormMessage 
 } from '@/components/ui/form';
 import { Link } from 'react-router-dom';
+import { useLazyFetchUserQuery, useCreateUserMutation } from '../services/users';
 
 // Define the form validation schema
 const signUpSchema = z.object({
@@ -40,7 +41,7 @@ const signUpSchema = z.object({
     .email({ message: 'Please enter a valid email address.' }),
   password: z
     .string()
-    .min(8, { message: 'Password must be at least 8 characters.' })
+    .min(4, { message: 'Password must be at least 4 characters.' })
     .regex(/[A-Z]/, { message: 'Password must contain at least one uppercase letter.' })
     .regex(/[a-z]/, { message: 'Password must contain at least one lowercase letter.' })
     .regex(/[0-9]/, { message: 'Password must contain at least one number.' }),
@@ -49,6 +50,8 @@ const signUpSchema = z.object({
 type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 const SignUp: React.FC = () => {
+  const [ createUser, {data, error, isLoading} ] = useCreateUserMutation();
+
   // Initialize the form
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
@@ -61,12 +64,41 @@ const SignUp: React.FC = () => {
   });
 
   // Form submission handler
-  const onSubmit = (data: SignUpFormValues) => {
+  const onSubmit = async (data: SignUpFormValues) => {
     console.log('Form submitted:', data);
-    toast.success('Account created successfully!', {
-      description: `Welcome, ${data.firstName}! Your account has been created.`,
+
+    const formParams = {
+      first_name: data.firstName,
+      last_name: data.lastName,
+      password: data.password,
+      email: data.email,
+      role: 'user',
+      avatar: ''
+    }
+    try {
+      await createUser(formParams).then((response) => {
+        console.log(response)
+        if (response?.data) {
+          toast.success('Account created successfully!', {
+            description: `Welcome, ${data.firstName}! Your account has been created.`,
+          });      
+        }
+      });
+    } catch (error) {
+      console.error(error)
+    }
+  };
+
+  if(isLoading) {
+    toast.success('Validating information!', {
+      description: "We're validating your information...",
     });
-    // Here you would typically handle the actual signup process
+  };
+
+  if(error) {
+    toast.success('Error sign up!', {
+      description: "Encountered an error while creating your account.",
+    });
   };
 
   return (
@@ -134,7 +166,7 @@ const SignUp: React.FC = () => {
                       <Input type="password" placeholder="••••••••" {...field} />
                     </FormControl>
                     <FormDescription>
-                      Password must be at least 8 characters with uppercase, lowercase and numbers.
+                      Password must be at least 4 characters with uppercase, lowercase and numbers.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -150,7 +182,7 @@ const SignUp: React.FC = () => {
         <CardFooter className="flex flex-col space-y-2">
           <div className="text-sm text-center text-[var(--muted)]">
             Already have an account?{' '}
-            <Link to="/signin" className="underline text-primary hover:text-primary/80">
+            <Link to="/sign-in" className="underline text-primary hover:text-primary/80">
               Sign in
             </Link>
           </div>

@@ -1,5 +1,6 @@
 
-import React from 'react';
+import React, { useContext, useEffect, useState} from 'react';
+import { useNavigate } from "react-router-dom";
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -24,6 +25,8 @@ import {
   FormMessage 
 } from '@/components/ui/form';
 import { Link } from 'react-router-dom';
+import { AuthContext } from "../context/AuthProvider";
+import { useSignInUserMutation, useLazyFetchMeQuery } from "../services/users";
 
 // Define the form validation schema
 const signInSchema = z.object({
@@ -32,13 +35,19 @@ const signInSchema = z.object({
     .email({ message: 'Please enter a valid email address.' }),
   password: z
     .string()
-    .min(8, { message: 'Password must be at least 8 characters.' }),
+    .min(4, { message: 'Password must be at least 4 characters.' }),
 });
 
 type SignInFormValues = z.infer<typeof signInSchema>;
 
 const SignIn: React.FC = () => {
   // Initialize the form
+  const navigate = useNavigate();
+  const [signInError, setSignInError] = useState(null)
+  const { user, signin, accessToken } = useContext(AuthContext);
+  const [ signInUser, {data, error, isLoading} ] = useSignInUserMutation();
+  const [ fetchMe, {}] = useLazyFetchMeQuery();
+
   const form = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -48,14 +57,70 @@ const SignIn: React.FC = () => {
   });
 
   // Form submission handler
-  const onSubmit = (data: SignInFormValues) => {
+  const onSubmit = async (data: SignInFormValues) => {
     console.log('Form submitted:', data);
-    toast.success('Sign in successful!', {
-      description: 'Welcome back!',
-    });
     // Here you would typically handle the actual signin process
+    var bodyFormData = new FormData();
+    bodyFormData.append('username', data.email);
+    bodyFormData.append('password', data.password);
+    try {
+      signInUser(bodyFormData).then(response => {
+        console.log("HEY", response.data)
+        const responseData = response.data;
+        localStorage.setItem('accessToken', responseData.access_token);
+
+        fetchMe().then(response => {
+
+          if(response.error && response.error.status == 401) {
+            localStorage.removeItem('accessToken');
+            navigate("/sign-in");
+            return
+          }
+
+          localStorage.setItem('user', JSON.stringify(response.data));
+          toast.success('Sign in successful!', {
+            description: `Welcome back, ${response.data.first_name}`,
+          });
+
+          setTimeout(() => {
+            signin(response.data.access_token, confirm);
+          }, 1000);
+        })
+
+      });
+    } catch (error) {
+      console.info(error)
+    }    
   };
 
+  const confirm = () => {
+    window.location.href = '/';
+  }
+
+  // if (data) {
+  //   console.log("DATA", data.status, data.detail)
+
+  //   localStorage.setItem('accessToken', data.access_token);
+  //   // Call user into
+  //   fetchMe().then(response => {
+  //     if(response.error && response.error.status == 401) {
+  //       // localStorage.removeItem('accessToken');
+  //       // navigate("/sign-in");
+  //       return
+  //     }
+  //     // localStorage.setItem('user', JSON.stringify(response.data));
+  //     toast.success('Sign in successful!', {
+  //       description: `Welcome back, ${response.data.first_name}`,
+  //     });
+  //   })
+
+    // setTimeout(() => {
+      // signin(data.access_token, confirm);
+    // }, 1000);
+  // }
+
+
+  console.log("Error", error)
   return (
     <div className="container flex items-center justify-center min-h-screen py-8">
       <Card className="w-full max-w-md">
@@ -65,6 +130,12 @@ const SignIn: React.FC = () => {
             Enter your credentials to access your account
           </CardDescription>
         </CardHeader>
+        { error && (
+          <CardDescription className="text-center">
+            { error.data.detail }
+          </CardDescription>
+        )}
+
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

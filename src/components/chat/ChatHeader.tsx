@@ -11,10 +11,10 @@ export const ChatHeader = ({ onSendSimulatedMessage }: ChatHeaderProps) => {
     <div className="bg-[var(--background)] border-b border-[var(--border)] p-2 sm:p-4 flex items-center justify-between">
       <div className="flex items-center gap-2 sm:gap-3">
         <Avatar className="w-8 h-8 sm:w-10 sm:h-10">
-          <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158" alt="User" className="object-cover" />
+          <img src="../../../src/assets/images/logo-cropped.png" alt="User" className="object-cover" />
         </Avatar>
         <div>
-          <div className="font-medium text-sm sm:text-base text-[var(--foreground)]">Sarah Parker</div>
+          <div className="font-medium text-sm sm:text-base text-[var(--foreground)]">Sierra</div>
           <div className="text-xs sm:text-sm text-[var(--muted)]">Active now</div>
         </div>
       </div>

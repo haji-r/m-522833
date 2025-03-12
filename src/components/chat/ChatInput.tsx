@@ -6,13 +6,15 @@ interface ChatInputProps {
   setNewMessage: (message: string) => void;
   handleSendMessage: (e: React.FormEvent) => void;
   isSending: boolean;
+  inputRef: any;
 }
 
-export const ChatInput = ({ newMessage, setNewMessage, handleSendMessage, isSending }: ChatInputProps) => {
+export const ChatInput = ({ newMessage, setNewMessage, handleSendMessage, isSending, inputRef }: ChatInputProps) => {
   return (
     <form onSubmit={handleSendMessage} className="p-2 sm:p-4 bg-[var(--background)] border-t border-[var(--border)]">
       <div className="flex items-center gap-2 bg-[var(--message-bg)] rounded-lg p-1.5 sm:p-2">
         <input
+          ref={inputRef}
           type="text"
           placeholder="Type a message..."
           className="flex-1 bg-transparent outline-none px-1.5 sm:px-2 text-sm sm:text-base text-[var(--foreground)]"
