@@ -28,3 +28,4 @@ env.js
 
 # Windows WSL
 Zone.Identifier
+*.Identifier
