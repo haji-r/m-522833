@@ -87,6 +87,6 @@
     "vite": "^5.4.1"
   },
   "react-dotenv": {
-    "whitelist": ["GPT_API_KEY"]
+    "whitelist": ["GPT_API_KEY", "BASE_URL"]
   }  
 }
