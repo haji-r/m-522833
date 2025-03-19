@@ -1,4 +1,3 @@
-
 import { Avatar } from "@/components/ui/avatar";
 import { Check } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
@@ -15,8 +14,9 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 export const ChatMessage = ({ message, user, isFirstInGroup, isLastInGroup }) => {
   dayjs.extend(relativeTime);
 
-  const avatar = message.role === "user" ? user.avatar : "../../../src/assets/images/logo-cropped.png";
+  const avatar = message.role === "user" ? user.avatar : `../../../src/assets/images/${message.name.toLowerCase()}.webp`;
   const bubble = message.role === "user" ? "bg-[var(--bubble-sent)] text-[var(--foreground)]" : "bg-[var(--message-bg)] text-[var(--foreground)]";
+  const avatarDefault = avatar.length > 1 ? avatar : "https://bluerydge.com/_ipx/_/icons/ic-profile.svg"
 
   return (
     <div 
@@ -24,7 +24,7 @@ export const ChatMessage = ({ message, user, isFirstInGroup, isLastInGroup }) =>
     >
       <Avatar className="w-6 h-6 sm:w-8 sm:h-8 mt-0.5 flex-shrink-0">
         <img 
-          src={avatar} 
+          src={avatarDefault} 
           alt={message.role === "user" ? message.name : "Ai"} 
           className="object-cover"
         />

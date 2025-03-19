@@ -3,7 +3,7 @@ import React from 'react';
 import { Search, Plus, Moon, Sun } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { useTheme } from "./ThemeProvider";
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -48,15 +48,12 @@ export const ChatSidebar = ({chats, user}) => {
   const { theme, toggleTheme } = useTheme();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  console.log("ChatSidebar", chats)
-  
-  const chatId = searchParams.get("chat_id")
-  if(chatId) {
-    console.log('HEY')
-  }
-
   const hoverBackground = (theme === "dark") ? "hover:bg-white/10" : "hover:bg-slate-200"
   const avatar = (user && (user.avatar.length > 1) ) ? user.avatar : "https://bluerydge.com/_ipx/_/icons/ic-profile.svg"
+
+  const handleNewChat = () => {
+    window.location.href = '/shazbot?new=true';
+  };
 
   return (
     <div className="w-[280px] sm:w-80 h-full glass p-4 flex flex-col gap-4">
@@ -84,7 +81,8 @@ export const ChatSidebar = ({chats, user}) => {
           </button>
           <button
             className="p-2 hover:bg-white/5 rounded-full transition-colors"
-            onClick={() => navigate('?new=true')}>
+            onClick={handleNewChat}
+          >
             <Plus className="w-5 h-5" />
           </button>
         </div>

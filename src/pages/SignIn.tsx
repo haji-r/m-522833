@@ -1,5 +1,5 @@
 
-import React, { useContext, useEffect, useState} from 'react';
+import React, { useContext, useState} from 'react';
 import { useNavigate } from "react-router-dom";
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
@@ -27,6 +27,8 @@ import {
 import { Link } from 'react-router-dom';
 import { AuthContext } from "../context/AuthProvider";
 import { useSignInUserMutation, useLazyFetchMeQuery } from "../services/users";
+import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
 
 // Define the form validation schema
 const signInSchema = z.object({
@@ -43,7 +45,6 @@ type SignInFormValues = z.infer<typeof signInSchema>;
 const SignIn: React.FC = () => {
   // Initialize the form
   const navigate = useNavigate();
-  const [signInError, setSignInError] = useState(null)
   const { user, signin, accessToken } = useContext(AuthContext);
   const [ signInUser, {data, error, isLoading} ] = useSignInUserMutation();
   const [ fetchMe, {}] = useLazyFetchMeQuery();
@@ -58,14 +59,12 @@ const SignIn: React.FC = () => {
 
   // Form submission handler
   const onSubmit = async (data: SignInFormValues) => {
-    console.log('Form submitted:', data);
     // Here you would typically handle the actual signin process
     var bodyFormData = new FormData();
     bodyFormData.append('username', data.email);
     bodyFormData.append('password', data.password);
     try {
       signInUser(bodyFormData).then(response => {
-        console.log("HEY", response.data)
         const responseData = response.data;
         localStorage.setItem('accessToken', responseData.access_token);
 
@@ -94,94 +93,76 @@ const SignIn: React.FC = () => {
   };
 
   const confirm = () => {
-    window.location.href = '/';
+    window.location.href = '/shazbot';
   }
 
-  // if (data) {
-  //   console.log("DATA", data.status, data.detail)
-
-  //   localStorage.setItem('accessToken', data.access_token);
-  //   // Call user into
-  //   fetchMe().then(response => {
-  //     if(response.error && response.error.status == 401) {
-  //       // localStorage.removeItem('accessToken');
-  //       // navigate("/sign-in");
-  //       return
-  //     }
-  //     // localStorage.setItem('user', JSON.stringify(response.data));
-  //     toast.success('Sign in successful!', {
-  //       description: `Welcome back, ${response.data.first_name}`,
-  //     });
-  //   })
-
-    // setTimeout(() => {
-      // signin(data.access_token, confirm);
-    // }, 1000);
-  // }
-
-
-  console.log("Error", error)
   return (
-    <div className="container flex items-center justify-center min-h-screen py-8">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Sign In</CardTitle>
-          <CardDescription className="text-center">
-            Enter your credentials to access your account
-          </CardDescription>
-        </CardHeader>
-        { error && (
-          <CardDescription className="text-center">
-            { error.data.detail }
-          </CardDescription>
-        )}
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <main className="flex-grow">
+        <div className="container flex items-center justify-center py-8 md:mt-20 md:mb-20">
+          <Card className="w-full max-w-md">
+            <CardHeader className="space-y-1">
+              <CardTitle className="text-2xl font-bold text-center">Sign In</CardTitle>
+              <CardDescription className="text-center">
+                Enter your credentials to access your account
+              </CardDescription>
+            </CardHeader>
+            { error && (
+              <CardDescription className="text-center">
+                { error.data.detail }
+              </CardDescription>
+            )}
 
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input type="email" placeholder="john.doe@example.com" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input type="password" placeholder="••••••••" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <Button type="submit" className="w-full">
-                Sign In
-              </Button>
-            </form>
-          </Form>
-        </CardContent>
-        <CardFooter className="flex flex-col space-y-2">
-          <div className="text-sm text-center text-[var(--muted)]">
-            Don't have an account?{' '}
-            <Link to="/signup" className="underline text-primary hover:text-primary/80">
-              Sign Up
-            </Link>
-          </div>
-        </CardFooter>
-      </Card>
+            <CardContent>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input type="email" placeholder="john.doe@example.com" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input type="password" placeholder="••••••••" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <Button type="submit" className="w-full">
+                    Sign In
+                  </Button>
+                </form>
+              </Form>
+            </CardContent>
+            <CardFooter className="flex flex-col space-y-2">
+              <div className="text-sm text-center text-[var(--muted)]">
+                Don't have an account?{' '}
+                <Link to="/sign-up" className="underline text-primary hover:text-primary/80">
+                  Sign Up
+                </Link>
+              </div>
+            </CardFooter>
+          </Card>
+        </div>
+      </main>
+      <Footer />
     </div>
   );
 };

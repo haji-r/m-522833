@@ -1,18 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-const BASE_URL = "http://localhost:8000/v1";
+import env from "react-dotenv";
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
-  // baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
   baseQuery: fetchBaseQuery({
-    baseUrl: BASE_URL,
+    baseUrl: env.BASE_URL,
 
     prepareHeaders: (headers) => {  
       // If we have a token set in state, let's assume that we should be passing it.
-
       const localAccessToken = localStorage.getItem('accessToken');
-      console.log("HELLO", localAccessToken)
       if (localAccessToken) {
         headers.set('authorization', `Bearer ${localAccessToken}`)
       }
@@ -46,7 +42,6 @@ export const usersApi = createApi({
         body: user
       }),
       transformResponse: (response) => {
-        console.log(response)
         return response;
       }
     }),

@@ -1,5 +1,5 @@
 
-import React, { useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,11 +8,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Home, Info, Mail, User, UserPlus, LogOut, Menu, LogIn } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useParams } from 'react-router';
 import { AuthContext} from "../context/AuthProvider";
 
 export const NavMenu = () => {
   const navigate = useNavigate()
+  const location = useLocation();
+  const params = useParams()
   const { signout, accessToken, user } = useContext(AuthContext);
 
   const handleSignOut = () => {
@@ -20,6 +23,9 @@ export const NavMenu = () => {
     if (signOut)
       navigate("/sign-in");
   }
+
+  if (location.pathname != "/shazbot")
+    return null;
 
   const linkClass = "flex items-center gap-2 cursor-pointer";
 

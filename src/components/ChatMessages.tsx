@@ -1,6 +1,7 @@
 
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { toast } from "@/components/ui/use-toast";
+// import { toast } from "@/components/ui/use-toast";
+import { toast } from 'sonner';
 import { Message } from "@/types/chat";
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { initialMessages } from "@/constants/initialMessages";
@@ -13,11 +14,9 @@ import { useCreateThreadMutation, useLazyFetchThreadQuery, useLazyFetchThreadsQu
 import OpenAI from "openai";
 import env from "react-dotenv";
 
-export const ChatMessages = ({dbMessages, user, containerRef}) => {
-  // console.log("dbMessages", dbMessages)
+export const ChatMessages = ({ user }) => {
   const inputRef = useRef(null);
-  const { chats, setChats, accessToken, messages, setMessages } = useContext(AuthContext);
-  // const [messages, setMessages] = useState<Message[]>(dbMessages);
+  const { chats, setChats, accessToken, messages, setMessages, selectedModel } = useContext(AuthContext);
   const [newMessage, setNewMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -35,111 +34,13 @@ export const ChatMessages = ({dbMessages, user, containerRef}) => {
 
   useEffect(() => {
     scrollToBottom();
-    console.log("----->>")
-    console.log(messages)
-    console.log("----->>")
-
   }, [messages]);
 
-  const simulateReceiveMessage = () => {
-    const replyMsg: Message = {
-      id: Date.now(),
-      message: `# Design System Documentation
-
-## Introduction
-Welcome to our comprehensive design system documentation. This guide will help you understand our visual language and components.
-
-### Core Principles
-Our design system is built on three fundamental principles:
-1. Consistency
-2. Accessibility
-3. Scalability
-
-#### Getting Started
-New to our design system? Here's what you need to know first.
-
-## Visual Elements
-
-### Color System
-Here's our color palette breakdown:
-
-| Category | Light Mode | Dark Mode | Usage |
-|----------|------------|-----------|--------|
-| Primary | #646CFF | #747BFF | CTAs |
-| Secondary | #434343 | #A0A0A0 | Text |
-| Accent | #FF4545 | #FF6B6B | Alerts |
-| Background | #FFFFFF | #141413 | Surface |
-
-### Typography Hierarchy
-1. Display (32px)
-2. Heading (24px)
-3. Subheading (20px)
-4. Body (16px)
-
-## Components Library
-
-### Interactive Elements
-* Buttons
-* Inputs
-* Dropdowns
-
-### Layout Components
-- Cards
-- Grids
-- Navigation bars
-
-#### Usage Guidelines
-* Follow **accessibility** guidelines
-* Maintain _consistent_ spacing
-* Use appropriate \`color contrast\`
-
-> Important: Always refer to the latest version of this documentation.
-
-You can find more details in our [complete documentation](https://example.com/docs).
-
-### Code Examples
-
-\`\`\`typescript
-interface Theme {
-  light: string;
-  dark: string;
-}
-
-const theme: Theme = {
-  light: '#FFFFFF',
-  dark: '#141413'
-}
-\`\`\`
-
----
-
-Need help? Contact our [design team](mailto:design@example.com) 🎨`,
-      name: "other",
-      created_at: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      read: true,
-    };
-
-    toast({
-      description: "Sierra is typing...",
-      duration: 2000,
-    });
-
-    setTimeout(() => {
-      setMessages(prev => [...prev, replyMsg]);
-    }, 2000);
-  };
-
-
   const simulateMessageReceived = async (chatIdThread = null, message = null ) => {
-    toast({
-      description: "Sierra is typing...",
-      duration: 2000,
-    });
-
+    toast.loading(`${selectedModel} is typing...`);
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
-        // { role: "system", content: "You are a helpful assistant." },
         {
           role: "user",
           content: message,
@@ -151,9 +52,9 @@ Need help? Contact our [design team](mailto:design@example.com) 🎨`,
     const params = {
       id: Math.random(),
       chat_id: chatId,
-      // userId: user._id,      
+      // userId: user._id,
       avatar: "",
-      name: "Sierra",
+      name: selectedModel,
       role: "bot",
       message: completion.choices[0].message.content
     };
@@ -163,6 +64,7 @@ Need help? Contact our [design team](mailto:design@example.com) 🎨`,
       params
     ]);
 
+    toast.dismiss();
     saveToMessageDb(params);
     scrollToBottom();
   };
@@ -207,12 +109,10 @@ Need help? Contact our [design team](mailto:design@example.com) 🎨`,
           } else {
             messages = results[0].messages
           }
+
           setSearchParams({chat_id: results[0].id})
           setMessages(messages);
-
-          // createTempMessageLoader();
           simulateMessageReceived(newChatId, message);
-
           scrollToBottom();
         }
       })
@@ -222,8 +122,6 @@ Need help? Contact our [design team](mailto:design@example.com) 🎨`,
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim() || isSending) return;
-    console.log(newMessage)
-    console.log("Input", inputRef.current.value)
 
     inputRef.current.value = "";
     // MARK: Check if a thread is selected - this is indicated by a chat_id present on the parameter
@@ -233,7 +131,6 @@ Need help? Contact our [design team](mailto:design@example.com) 🎨`,
        * Save new message and update chat updated_at date 
        * to reflect latest in conversation thread.
       */
-
       const messageObj = {
         role: "user",
         message: newMessage.trim(),
@@ -255,53 +152,12 @@ Need help? Contact our [design team](mailto:design@example.com) 🎨`,
       createNewChatThread(newMessage.trim(), chatId)
     }
     setNewMessage("")
-    
-    // const newMsg: Message = {
-    //   id: Date.now(),
-    //   message: newMessage,
-    //   role: "user",
-    //   name: "Danny",
-    //   chat_id: 15,
-    //   user_id: 1,
-    //   created_at: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    //   updated_at: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    //   read: false,
-    //   sending: true
-    // };
-
-    // setMessages(prev => [...prev, newMsg]);
-    // setIsSending(true);
-    // setNewMessage("");
-
-    // await new Promise(resolve => setTimeout(resolve, 1000));
-
-    // setMessages(prev => 
-    //   prev.map(msg => 
-    //     msg.id === newMsg.id 
-    //       ? { ...msg, sending: false } 
-    //       : msg
-    //   )
-    // );
-    
-    // setIsSending(false);
-    
-    // toast({
-    //   description: "Message sent",
-    //   duration: 2000,
-    // });
-
-    // setTimeout(async () => {
-    //   simulateReceiveMessage();
-    // }, 2000);
   };
 
   const saveToMessageDb = async (params, reload = false) => {
     try {
       await createThread(params).then(response => {
-        console.log("response", response)
-
         if (reload) {
-          console.log(response)
           setMessages((messages) => [
             ...messages,
             response.data
@@ -320,8 +176,8 @@ Need help? Contact our [design team](mailto:design@example.com) 🎨`,
   }
 
   return (
-    <div className="flex-1 flex flex-col h-[100dvh]" ref={containerRef}>
-      <ChatHeader onSendSimulatedMessage={simulateReceiveMessage} />
+    <div className="flex-1 flex flex-col h-[100dvh]">
+      <ChatHeader />
 
       <div className="flex-1 overflow-y-auto py-2 sm:py-4 space-y-4 sm:space-y-6 px-2 sm:px-4 md:px-8 scrollbar-hide bg-[var(--background)]">
         {messages.map((message, index) => {

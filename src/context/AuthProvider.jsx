@@ -13,8 +13,9 @@ export const AuthProvider = ({children}) => {
 
   const [accessToken, setAccessToken] = useState(localAccessToken);
 
+  const [selectedModel, setSelectedModel] = useState('Sierra');
+
   const signin = (token, callback) => {
-    console.log("TOKEN", token)
     return fakeAuthProvider.signin(() => {
       // setUser(newUser);
       setAccessToken(token)
@@ -30,7 +31,7 @@ export const AuthProvider = ({children}) => {
     return true;
   };
 
-  const value = { user, setUser, signin, signout, chats, setChats, accessToken, setAccessToken, messages, setMessages };
+  const value = { user, setUser, signin, signout, chats, setChats, accessToken, setAccessToken, messages, setMessages, selectedModel, setSelectedModel };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
