@@ -1,9 +1,13 @@
 
 export interface Message {
-  id: string;
-  content: string;
-  sender: "me" | "other";
-  timestamp: string;
+  id: number;
+  message: string;
+  name: string;
+  role: string;
+  created_at: string;
+  updated_at: string;
+  chat_id: number;
+  user_id: number;
   read: boolean;
   sending?: boolean;
 }

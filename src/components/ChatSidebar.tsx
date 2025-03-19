@@ -3,6 +3,10 @@ import React from 'react';
 import { Search, Plus, Moon, Sun } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { useTheme } from "./ThemeProvider";
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
+
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 interface User {
   id: string;
@@ -38,8 +42,18 @@ const users: User[] = [
   },
 ];
 
-export const ChatSidebar = () => {
+export const ChatSidebar = ({chats, user}) => {
+  dayjs.extend(relativeTime);
+  const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const hoverBackground = (theme === "dark") ? "hover:bg-white/10" : "hover:bg-slate-200"
+  const avatar = (user && (user.avatar.length > 1) ) ? user.avatar : "https://bluerydge.com/_ipx/_/icons/ic-profile.svg"
+
+  const handleNewChat = () => {
+    window.location.href = '/shazbot?new=true';
+  };
 
   return (
     <div className="w-[280px] sm:w-80 h-full glass p-4 flex flex-col gap-4">
@@ -47,12 +61,12 @@ export const ChatSidebar = () => {
         <div className="flex items-center gap-2">
           <Avatar className="w-8 h-8">
             <img 
-              src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7" 
+              src={avatar} 
               alt="Me" 
               className="object-cover"
             />
           </Avatar>
-          <span className="font-medium">Me</span>
+          <span className="font-medium">{user.first_name}</span>
         </div>
         <div className="flex items-center gap-2">
           <button 
@@ -65,7 +79,10 @@ export const ChatSidebar = () => {
               <Moon className="w-5 h-5" />
             )}
           </button>
-          <button className="p-2 hover:bg-white/5 rounded-full transition-colors">
+          <button
+            className="p-2 hover:bg-white/5 rounded-full transition-colors"
+            onClick={handleNewChat}
+          >
             <Plus className="w-5 h-5" />
           </button>
         </div>
@@ -81,20 +98,33 @@ export const ChatSidebar = () => {
       </div>
 
       <div className="flex-1 space-y-2 overflow-y-auto scrollbar-hide">
-        {users.map((user) => (
-          <div
-            key={user.id}
-            className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 cursor-pointer transition-colors"
-          >
-            <Avatar className="w-10 h-10">
-              <img src={user.avatar} alt={user.name} className="object-cover" />
-            </Avatar>
-            <div className="flex-1 min-w-0">
-              <div className="font-medium">{user.name}</div>
-              <div className="text-sm text-muted truncate">{user.status}</div>
+        {chats.map((chat) => {
+          const selectedDarkBackground = (searchParams.get("chat_id") == chat.id && theme === "dark") ? "bg-white/10" : null;
+          const selectedLightBackground = (searchParams.get("chat_id") == chat.id && theme === "light") ? "bg-slate-200" : null;
+          const listThemedBackground = selectedDarkBackground || selectedLightBackground
+
+          return (
+            <div
+              key={chat.id}
+              className={`flex items-center gap-3 p-2 rounded-lg ${hoverBackground} cursor-pointer transition-colors ${listThemedBackground}`}
+            >
+              {/* <Avatar className="w-10 h-10">
+                <img src={chat?.avatar} alt={chat.title} className="object-cover" />
+              </Avatar> */}
+              <a
+                key={chat.id} 
+                // className="text-base p-4 cursor-pointer hover:bg-slate-200 flex w-full text-primary-600 flex flex-col gap-y-2 bg-slate-50"
+                href={`?chat_id=${chat.id}`}
+              >
+
+                <div className="flex-1 min-w-0">
+                  <div className="font-medium">{chat.title}</div>
+                  <div className="text-sm text-muted truncate">{dayjs(chat.updated_at).fromNow()}</div>
+                </div>
+              </a>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   );
