@@ -1,6 +1,22 @@
+
 import React, { useState, createContext } from 'react';
 import { fakeAuthProvider } from '../services/auth';
-export const AuthContext = createContext();
+
+const defaultContextValue = {
+  user: null,
+  setUser: () => {},
+  signin: () => {},
+  signout: () => {},
+  chats: [],
+  setChats: () => {},
+  accessToken: null,
+  setAccessToken: () => {},
+  messages: [],
+  setMessages: () => {},
+  selectedModel: 'Sierra'
+};
+
+export const AuthContext = createContext(defaultContextValue);
 
 export const AuthProvider = ({children}) => {
   const localUser = JSON.parse(localStorage.getItem('user'));
